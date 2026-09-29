@@ -1,0 +1,13 @@
+{
+  "name": "nomadpay",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": {
+    "build:web": "esbuild web/app.js --bundle --minify --format=esm --outfile=web/app.bundle.js",
+    "compile:contract": "node scripts/compile-contract.mjs",
+    "deploy:contract": "node scripts/deploy-contract.mjs"
+  },
+  "dependencies": { "ethers": "^6.15.0" },
+  "devDependencies": { "esbuild": "^0.25.0", "solc": "0.8.37" },
+  "overrides": { "tmp": "0.2.7" }
+}
