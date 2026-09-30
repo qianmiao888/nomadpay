@@ -1,0 +1,12 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Deploy NomadPay on Monad Testnet</title><link rel="stylesheet" href="/style.css"></head>
+<body><header><a class="brand" href="/">◈ NomadPay</a><span class="network">Monad Testnet</span></header><main>
+  <section class="hero"><span class="eyebrow">PROJECT SETUP</span><h1>Deploy the<br><em>payment contract.</em></h1><p>Connect your testnet wallet, review the transaction, and copy the deployment settings into your local server. Your wallet keeps your private key.</p></section>
+  <div id="notice" class="notice" hidden></div>
+  <section class="panel"><div class="panel-head"><div><span class="step">01 / TESTNET</span><h2>Wallet deployment</h2></div><span class="icon">↗</span></div>
+    <p class="hint">You need a browser wallet connected to Monad Testnet (chain ID 10143) and test MON for gas. Only use a testnet wallet.</p>
+    <button id="deploy-button" class="primary" style="width:100%;margin-top:24px">Connect wallet and deploy <span>→</span></button>
+    <div id="result" hidden><p class="hint">Deployment confirmed. Copy these values into your server environment:</p><pre id="settings" style="white-space:pre-wrap;overflow-wrap:anywhere;background:#120c20;padding:18px;border-radius:10px;color:#d7c5f8"></pre><a id="explorer-link" target="_blank" rel="noopener noreferrer">View contract on Monadscan ↗</a></div>
+  </section>
+  <footer><span>Built on Monad</span><span>Transactions require your approval in the wallet.</span></footer>
+</main><script type="module" src="/deploy.bundle.js"></script></body></html>

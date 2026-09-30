@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.1.0",
   "scripts": {
-    "build:web": "esbuild web/app.js --bundle --minify --format=esm --outfile=web/app.bundle.js",
+    "build:web": "esbuild web/app.js web/deploy.js --bundle --minify --format=esm --outdir=web --outbase=web --entry-names=[name].bundle",
     "compile:contract": "node scripts/compile-contract.mjs",
     "deploy:contract": "node scripts/deploy-contract.mjs"
   },

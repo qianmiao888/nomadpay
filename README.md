@@ -34,14 +34,18 @@ The contract never holds customer funds after a successful payment. The server d
 
 Requirements: Go 1.23+, Node.js 20+, npm, and an EVM wallet configured for Monad Testnet.
 
+If you do not have a wallet yet, [install MetaMask from its official site](https://metamask.io/) and create a new wallet. Keep its recovery phrase private. Add Monad Testnet using the [Monad Developer Hub](https://monad.xyz/developers) (chain ID `10143`), then request development MON from the [official faucet](https://faucet.monad.xyz/). Testnet MON has no real value.
+
 ```powershell
 npm install
-npm run build:web
 npm run compile:contract
+npm run build:web
 go test ./...
 ```
 
-Deploy the contract from a **testnet-only wallet** with test MON:
+The easiest way to deploy is with a browser wallet. Start the server with `go run ./cmd/server`, open `http://localhost:8080/deploy.html`, connect a wallet on Monad Testnet with test MON, and approve deployment. The page prints `CONTRACT_ADDRESS`, `START_BLOCK`, and `EVENT_TOPIC` without asking for your private key. Restart the server with those environment variables set.
+
+For command-line deployment from a **testnet-only wallet**, set the key locally:
 
 ```powershell
 $env:MONAD_RPC_URL = 'https://rpc.testnet.monad.xyz'
