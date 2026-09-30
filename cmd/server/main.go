@@ -74,6 +74,8 @@ func main() {
 	mux.HandleFunc("POST /api/invoices", api.create)
 	mux.HandleFunc("GET /api/invoices", api.list)
 	mux.HandleFunc("GET /api/invoices/{id}", api.get)
+	mux.HandleFunc("GET /api/insights", api.insights)
+	mux.HandleFunc("GET /api/insights/demo", api.demoInsights)
 	mux.Handle("/", http.FileServer(http.Dir("web")))
 	addr := ":" + env("PORT", "8080")
 	log.Printf("NomadPay listening on %s", addr)
@@ -150,4 +152,17 @@ func (s *server) get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	writeJSON(w, 200, invoice)
+}
+
+func (s *server) insights(w http.ResponseWriter, r *http.Request) {
+	recipient := strings.ToLower(strings.TrimSpace(r.URL.Query().Get("recipient")))
+	if !nomadpay.ValidAddress(recipient) {
+		apiError(w, 400, "valid recipient required")
+		return
+	}
+	writeJSON(w, 200, nomadpay.AnalyzePayments(s.store.List(recipient), false))
+}
+
+func (s *server) demoInsights(w http.ResponseWriter, r *http.Request) {
+	writeJSON(w, 200, nomadpay.AnalyzePayments(nomadpay.SyntheticInvoices(), true))
 }

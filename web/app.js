@@ -70,4 +70,40 @@ $('pay-button').addEventListener('click', async () => {
     await tx.wait(); await refresh();
   } catch (e) { error(e.shortMessage || e.message); } finally { button.disabled = false; }
 });
+
+function showInsights(report) {
+  const box = $('insights-result'); box.replaceChildren(); box.hidden = false;
+  const title = document.createElement('strong');
+  title.textContent = report.synthetic ? 'Synthetic sample preview — not live payment data' : 'Your payment history';
+  box.append(title);
+  const summary = document.createElement('p');
+  summary.textContent = report.status === 'ready'
+    ? `${report.sampleCount} paid invoices analyzed. Median amount: ${report.medianAmountMon} MON. Median settlement delay: ${report.medianDelayHours} hours.`
+    : `${report.sampleCount} paid invoices available; ${report.minimumSamples} are required before scoring.`;
+  box.append(summary);
+  const explanation = document.createElement('p'); explanation.textContent = report.explanation; box.append(explanation);
+  if (report.anomalies.length) {
+    const list = document.createElement('ul');
+    for (const anomaly of report.anomalies) {
+      const item = document.createElement('li');
+      item.textContent = `${anomaly.invoiceId}: ${anomaly.amountMon} MON, ${anomaly.delayHours} hours, anomaly score ${anomaly.score}`;
+      list.append(item);
+    }
+    box.append(list);
+  } else if (report.status === 'ready') {
+    const none = document.createElement('p'); none.textContent = 'No unusual payments were detected in this history.'; box.append(none);
+  }
+}
+$('analyze-button').addEventListener('click', async () => {
+  clearError();
+  const recipient = currentInvoice?.recipient || $('recipient').value.trim();
+  if (!isAddress(recipient)) { error('Enter a valid recipient wallet address first.'); return; }
+  try { showInsights(await api(`/api/insights?recipient=${encodeURIComponent(recipient)}`)); }
+  catch (e) { error(e.message); }
+});
+$('sample-button').addEventListener('click', async () => {
+  clearError();
+  try { showInsights(await api('/api/insights/demo')); }
+  catch (e) { error(e.message); }
+});
 init();

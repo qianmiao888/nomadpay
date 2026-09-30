@@ -1,6 +1,6 @@
 # NomadPay
 
-**Create a shareable invoice, pay it on Monad, and automatically reconcile the onchain payment.**
+**Create a shareable invoice, pay it on Monad, automatically reconcile the onchain payment, and inspect unusual payment patterns.**
 
 NomadPay is a solo hackathon project for independent workers. It demonstrates a complete payment flow and a Go backend that indexes contract events, survives restarts, and handles duplicate events safely. It targets the **Consumer Products & Payments** track of Monad Metropolis.
 
@@ -11,6 +11,7 @@ NomadPay is a solo hackathon project for independent workers. It demonstrates a 
 3. A client connects an EVM wallet and pays through `NomadPay.pay`.
 4. The contract sends MON directly to the recipient and emits `InvoicePaid`.
 5. The Go indexer reads confirmed events in bounded block ranges and matches invoice ID, recipient, and exact amount. It saves payment state and the next block cursor together.
+6. An optional data science view learns a robust baseline from a recipient's paid invoices and highlights unusual amounts or reconciliation delays for review.
 
 ```text
 Browser ── invoice API ──> Go server ──> JSON state file
@@ -26,6 +27,7 @@ The contract never holds customer funds after a successful payment. The server d
 
 - `cmd/server`: HTTP API and static web server
 - `internal/nomadpay`: durable invoice store and RPC event indexer
+- `internal/nomadpay/insights.go`: unsupervised payment anomaly analysis
 - `contracts/NomadPay.sol`: direct payment contract
 - `web`: responsive invoice and wallet UI
 - `scripts`: compile and deploy scripts
@@ -82,6 +84,8 @@ To use a different testnet deployment, override `CONTRACT_ADDRESS`, `START_BLOCK
 | `GET` | `/api/invoices/{id}` | Read one invoice and its payment status |
 | `GET` | `/api/invoices?recipient=0x...` | List invoices for a recipient |
 | `GET` | `/api/config` | Return public network and contract configuration |
+| `GET` | `/api/insights?recipient=0x...` | Analyze a recipient's paid invoice history |
+| `GET` | `/api/insights/demo` | Preview the model on explicitly synthetic sample data |
 
 Example:
 
@@ -99,9 +103,17 @@ Invoke-RestMethod -Method Post -Uri 'http://localhost:8080/api/invoices' -Conten
 - A fresh, empty store starts at the current confirmed block; existing invoices retain their saved sync cursor so restarts do not lose payments.
 - RPC failures leave the cursor unchanged so the range is retried on the next poll.
 
+## Data science: payment anomalies
+
+The insights endpoint fits a separate **unsupervised robust baseline** for each recipient using two features: log payment amount and log invoice-to-reconciliation delay. It centers each feature on its median, scales by median absolute deviation, and flags points with a combined standardized distance of at least `3.5`. No labels, model API, or private key are needed. Scores are prompts to inspect an invoice, **not fraud verdicts**.
+
+The model abstains until there are 20 paid invoices for the recipient. Our live test currently has only one payment, so the product correctly returns `insufficient_data`. The “Preview sample data” button uses 25 synthetic invoices, clearly identified as such, to show the scoring behavior. Synthetic records are never added to the user's history.
+
+`paidAt` currently records when the backend reconciles an event, so the delay feature includes RPC or server downtime as well as customer payment time. A future version should store the chain block timestamp and train on a larger set of real invoices before treating scores as operational alerts.
+
 ## Current limits
 
-This is a hackathon demo, not a production payment service. It uses one server and a JSON file, has no account authentication, and currently supports native MON only. For production use, add authentication, database transactions, monitoring, stronger reorganization handling, and a security review. A recipient can create invoices without proving wallet ownership, so the UI should be used with a trusted invoice link.
+This is a hackathon demo, not a production payment service. It uses one server and a JSON file, has no account authentication, and currently supports native MON only. For production use, add authentication, database transactions, monitoring, stronger reorganization handling, and a security review. A recipient can create invoices without proving wallet ownership, so the UI should be used with a trusted invoice link. The data science preview is not evidence that the model performs well on real payment data.
 
 ## Validation
 
