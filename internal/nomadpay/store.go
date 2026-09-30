@@ -112,6 +112,22 @@ func (s *Store) NextBlock(start uint64) uint64 {
 	return s.state.NextBlock
 }
 
+// A new store has no invoices to reconcile from the past. Start at the current
+// safe head instead of replaying every block since contract deployment.
+func (s *Store) InitializeCursorIfEmpty(nextBlock uint64) error {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+	if s.state.NextBlock != 0 || len(s.state.Invoices) != 0 {
+		return nil
+	}
+	s.state.NextBlock = nextBlock
+	if err := s.save(); err != nil {
+		s.state.NextBlock = 0
+		return err
+	}
+	return nil
+}
+
 type Payment struct{ InvoiceID, Payer, Recipient, AmountWei, TxHash, EventKey string }
 
 func (s *Store) ApplyBlock(nextBlock uint64, payments []Payment) error {

@@ -48,7 +48,7 @@ The easiest way to deploy is with a browser wallet. Start the server with `go ru
 For command-line deployment from a **testnet-only wallet**, set the key locally:
 
 ```powershell
-$env:MONAD_RPC_URL = 'https://rpc.testnet.monad.xyz'
+$env:MONAD_RPC_URL = 'https://rpc.ankr.com/monad_testnet'
 $env:DEPLOYER_PRIVATE_KEY = '<testnet-private-key>'
 npm run deploy:contract
 ```
@@ -59,13 +59,20 @@ The deploy command prints `CONTRACT_ADDRESS`, `START_BLOCK`, and `EVENT_TOPIC`. 
 $env:CONTRACT_ADDRESS = '<deployed-address>'
 $env:START_BLOCK = '<deployment-block>'
 $env:EVENT_TOPIC = '<printed-topic>'
-$env:MONAD_RPC_URL = 'https://rpc.testnet.monad.xyz'
+$env:MONAD_RPC_URL = 'https://rpc.ankr.com/monad_testnet'
 go run ./cmd/server
 ```
 
-Open `http://localhost:8080`. The `.env.example` file lists all settings; the server reads environment variables directly. Never commit `DEPLOYER_PRIVATE_KEY` or a filled `.env` file.
+Open `http://localhost:8080`. The server defaults to the deployed Monad Testnet contract listed below; environment variables override those values. The `.env.example` file lists all settings, but the server reads environment variables directly. Never commit `DEPLOYER_PRIVATE_KEY` or a filled `.env` file.
 
-If no contract address is set, invoice creation still works locally, but wallet payments are disabled.
+To use a different testnet deployment, override `CONTRACT_ADDRESS`, `START_BLOCK`, and `EVENT_TOPIC` with the values printed by the deployment page.
+
+## Verified testnet deployment
+
+- Contract: [`0x0ab5ED99aA3fB5cfF20cF91bCcE50A4856150958`](https://testnet.monadscan.com/address/0x0ab5ED99aA3fB5cfF20cF91bCcE50A4856150958)
+- Deployment block: `66910792`; [deployment transaction](https://testnet.monadscan.com/tx/0x724fca884068f8284c073c21557e4d7e3965eb94a1cdd141d57a5d574522d4a1)
+- [End-to-end test payment](https://testnet.monadscan.com/tx/0x4fbb21c39d7b3bdb49e71de8b572d923865b060608cc8928a55382e5c2d305c0): `0.001` test MON sent to the invoice recipient; the Go indexer marked the invoice `paid` after confirmations.
+- Chain ID: `10143` (Monad Testnet). Testnet MON has no monetary value.
 
 ## API
 
@@ -89,6 +96,7 @@ Invoke-RestMethod -Method Post -Uri 'http://localhost:8080/api/invoices' -Conten
 - It requests at most 50 blocks per `eth_getLogs` call, within Monad public RPC range limits.
 - Payment matching checks the contract address, event topic, invoice ID, recipient, and exact amount.
 - Transaction hash plus log index provides an idempotency key. The cursor and invoice updates are saved in one atomic file replacement.
+- A fresh, empty store starts at the current confirmed block; existing invoices retain their saved sync cursor so restarts do not lose payments.
 - RPC failures leave the cursor unchanged so the range is retried on the next poll.
 
 ## Current limits
@@ -97,7 +105,7 @@ This is a hackathon demo, not a production payment service. It uses one server a
 
 ## Validation
 
-Run `go test ./...` for payment matching, duplicate event handling, restart recovery, and a mocked RPC sync. Compile the contract with `npm run compile:contract`; a testnet deployment and its explorer URL should be added here after deployment.
+Run `go test ./...` for payment matching, duplicate event handling, restart recovery, and a mocked RPC sync. Compile the contract with `npm run compile:contract`.
 
 ## References
 

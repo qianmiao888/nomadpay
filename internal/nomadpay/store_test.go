@@ -54,3 +54,29 @@ func TestPaymentReconciliationAndRestart(t *testing.T) {
 		t.Fatal("replay changed payment")
 	}
 }
+
+func TestFreshStoreSkipsPastBlocksButExistingInvoiceDoesNot(t *testing.T) {
+	store, err := OpenStore(filepath.Join(t.TempDir(), "empty.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := store.InitializeCursorIfEmpty(900); err != nil {
+		t.Fatal(err)
+	}
+	if got := store.NextBlock(100); got != 900 {
+		t.Fatalf("fresh cursor = %d", got)
+	}
+	other, err := OpenStore(filepath.Join(t.TempDir(), "invoice.json"))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if _, err := other.Create("0x1111111111111111111111111111111111111111", "1", "0.000000000000000001", "Existing invoice"); err != nil {
+		t.Fatal(err)
+	}
+	if err := other.InitializeCursorIfEmpty(900); err != nil {
+		t.Fatal(err)
+	}
+	if got := other.NextBlock(100); got != 100 {
+		t.Fatalf("existing invoice skipped history: %d", got)
+	}
+}

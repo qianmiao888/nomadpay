@@ -142,6 +142,13 @@ func (w *Watcher) Sync(ctx context.Context) error {
 		return nil
 	}
 	safe := head - w.cfg.Confirmations
+	initial := safe + 1
+	if initial < w.cfg.StartBlock {
+		initial = w.cfg.StartBlock
+	}
+	if err := w.store.InitializeCursorIfEmpty(initial); err != nil {
+		return err
+	}
 	from := w.store.NextBlock(w.cfg.StartBlock)
 	if from > safe {
 		return nil

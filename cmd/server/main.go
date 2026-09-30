@@ -35,11 +35,11 @@ func main() {
 		log.Fatal(err)
 	}
 	cfg := nomadpay.Config{
-		RPCURL:        env("MONAD_RPC_URL", "https://rpc.testnet.monad.xyz"),
+		RPCURL:        env("MONAD_RPC_URL", "https://rpc.ankr.com/monad_testnet"),
 		ChainID:       envInt("CHAIN_ID", 10143),
-		Contract:      strings.ToLower(os.Getenv("CONTRACT_ADDRESS")),
+		Contract:      strings.ToLower(env("CONTRACT_ADDRESS", "0x0ab5ED99aA3fB5cfF20cF91bCcE50A4856150958")),
 		EventTopic:    strings.ToLower(env("EVENT_TOPIC", "0x787fcac3b50ab9534e1ef2e289dfa2a75eb9481de9f9061d4773232074751582")),
-		StartBlock:    envInt("START_BLOCK", 0),
+		StartBlock:    envInt("START_BLOCK", 66910792),
 		Confirmations: envInt("CONFIRMATIONS", 12),
 		ExplorerURL:   env("EXPLORER_URL", "https://testnet.monadscan.com"),
 	}
