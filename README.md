@@ -1,3 +1,5 @@
+![NomadPay logo](web/logo-lockup.svg)
+
 # NomadPay
 
 **Create a shareable invoice, pay it on Monad, automatically reconcile the onchain payment, and inspect unusual payment patterns.**

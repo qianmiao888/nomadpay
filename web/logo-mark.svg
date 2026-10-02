@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-labelledby="title desc">
+  <title id="title">NomadPay mark</title>
+  <desc id="desc">A rounded violet square with an N-shaped payment path and mint accent.</desc>
+  <rect width="96" height="96" rx="25" fill="#241438"/>
+  <path d="M28 69V27" fill="none" stroke="#B68DFF" stroke-width="11" stroke-linecap="round"/>
+  <path d="M68 69V27" fill="none" stroke="#B68DFF" stroke-width="11" stroke-linecap="round"/>
+  <path d="M28 27L68 69" fill="none" stroke="#7AE8C2" stroke-width="11" stroke-linecap="round"/>
+  <circle cx="68" cy="27" r="5.5" fill="#7AE8C2"/>
+</svg>
