@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>NomadPay — Live Monad Testnet Demo</title><link rel="icon" type="image/svg+xml" href="logo-mark.svg"><link rel="stylesheet" href="style.css"></head>
+<body>
+  <header><a class="brand" href="./"><img src="logo-mark.svg" alt="" width="32" height="32"><span>NomadPay</span></a><span class="network">Monad Testnet</span></header>
+  <main>
+    <section class="hero"><span class="eyebrow">LIVE MONAD TESTNET DEMO</span><h1>Work anywhere.<br><em>Get paid clearly.</em></h1><p>Create an invoice, share a link, and see a direct wallet payment confirmed onchain.</p><p><a class="demo-link" href="?demo=paid">See a verified test payment →</a></p></section>
+    <div id="notice" class="notice" hidden></div>
+    <section id="create-view" class="panel"><div class="panel-head"><div><span class="step">01 / CREATE</span><h2>New invoice</h2></div><span class="icon">↗</span></div>
+      <form id="invoice-form"><label>Your wallet address<input name="recipient" id="recipient" placeholder="0x..." required></label><label>Amount in MON<input name="amountMon" type="text" inputmode="decimal" placeholder="0.01" pattern="[0-9]+(\.[0-9]{1,18})?" required></label><label>What is this for?<input name="description" maxlength="140" placeholder="Website design" required></label><button type="submit" class="primary">Create invoice <span>→</span></button></form>
+      <p class="hint">This testnet demo puts invoice details in the shareable URL. Test MON has no monetary value.</p>
+    </section>
+    <section id="invoice-view" class="panel" hidden><div class="panel-head"><div><span class="step">02 / PAY</span><h2>Invoice</h2></div><span id="status" class="status"></span></div><div class="invoice-detail"><div><small>DESCRIPTION</small><strong id="view-description"></strong></div><div><small>AMOUNT</small><strong id="view-amount"></strong></div><div><small>RECIPIENT</small><code id="view-recipient"></code></div></div><div class="actions"><button id="pay-button" class="primary">Pay with wallet <span>→</span></button><button id="copy-button" class="secondary">Copy invoice link</button></div><p id="tx-line" class="hint"></p><p class="hint"><a href="./">Create another invoice</a></p></section>
+    <section class="panel insights-panel"><div class="panel-head"><div><span class="step">03 / DATA SCIENCE</span><h2>Payment anomalies</h2></div><span class="icon">◌</span></div><p class="hint">The Go backend analyzes paid invoice history for unusual amounts and settlement delays. It requires at least 20 payments. The open-source implementation and synthetic preview are in the repository.</p><div class="actions"><a class="secondary link-button" href="https://github.com/qianmiao888/nomadpay#how-it-works" target="_blank" rel="noopener noreferrer">Explore the Go backend →</a></div></section>
+    <footer><span>Built on Monad Testnet</span><span>Payments settle directly to the recipient. Invoice details in the link are public.</span></footer>
+  </main><script type="module" src="app.bundle.js"></script>
+</body></html>

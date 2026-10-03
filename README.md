@@ -4,6 +4,10 @@
 
 **Create a shareable invoice, pay it on Monad, automatically reconcile the onchain payment, and inspect unusual payment patterns.**
 
+## Live demo
+
+[Open the HTTPS Monad Testnet demo](https://qianmiao888.github.io/nomadpay/) or [view a verified payment](https://qianmiao888.github.io/nomadpay/?demo=paid). The browser demo in `docs/` creates shareable invoice URLs, calls the deployed payment contract through an EVM wallet, and checks matching `InvoicePaid` logs through the public testnet RPC. It stores invoice details in the URL, so anyone with the link can read them. The Go server below offers persistent invoice storage, automatic event indexing, and payment anomaly analysis; it is not hosted by the static demo.
+
 NomadPay is a solo hackathon project for independent workers. It demonstrates a complete payment flow and a Go backend that indexes contract events, survives restarts, and handles duplicate events safely. It targets the **Consumer Products & Payments** track of Monad Metropolis.
 
 ## How it works

@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "scripts": {
     "build:web": "esbuild web/app.js web/deploy.js --bundle --minify --format=esm --outdir=web --outbase=web --entry-names=[name].bundle",
+    "build:live": "esbuild docs/live.js --bundle --minify --format=esm --outfile=docs/app.bundle.js",
     "compile:contract": "node scripts/compile-contract.mjs",
     "deploy:contract": "node scripts/deploy-contract.mjs"
   },
