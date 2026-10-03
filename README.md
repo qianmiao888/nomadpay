@@ -10,7 +10,7 @@
 
 [Watch the 42-second technical demo video](https://qianmiao888.github.io/nomadpay/demo-video.html). It records the live product in a browser, including invoice creation and a separate, previously verified testnet payment.
 
-[Watch the 57-second promo video](https://qianmiao888.github.io/nomadpay/promo-video.html), introducing the solo builder, the problem, and the motivation behind the project.
+[Watch the 50-second promo video](https://qianmiao888.github.io/nomadpay/promo-video.html), introducing the solo builder, the problem, and the motivation behind the project.
 
 NomadPay is a solo hackathon project for independent workers. It demonstrates a complete payment flow and a Go backend that indexes contract events, survives restarts, and handles duplicate events safely. It targets the **Consumer Products & Payments** track of Monad Metropolis.
 
