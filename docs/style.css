@@ -2,3 +2,4 @@
 /* Keep the icon and wordmark aligned in the site header. */
 .brand{display:inline-flex;align-items:center;gap:10px}
 .demo-link{font-size:15px;color:#c8a9ff;font-weight:750;text-decoration:none}.demo-link:hover{text-decoration:underline}.link-button{display:inline-flex;align-items:center;text-decoration:none;padding:15px 19px;border-radius:10px;font-weight:750}
+[hidden]{display:none!important}
